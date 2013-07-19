@@ -2,12 +2,12 @@ function result = knn(trainX, trainclassY,testZ, k, weight,type)
  
 % Classify using the Nearest neighbor algorithm 
 % Inputs: 
-% 	trainX	       - Train sample matrix, n*d, n points, each d dimentions 
+% trainX	       - Train sample matrix, n*d, n points, each d dimentions 
 %	trainclassY	   - class of trainX, n*1 
-%   testZ          - Test sample matrix , N*d 
+% testZ          - Test sample matrix , N*d 
 %	k		       - Number of nearest neighbors  
-%   weight         - Weights of the training samples
-%   type           - specified measure distance: 2norm, 1norm  etc. 
+% weight         - Weights of the training samples
+% type           - specified measure distance: 2norm, 1norm  etc. 
 % Outputs: 
 %	result	       - class of testZ, N*1 
  
@@ -17,7 +17,7 @@ if size(trainX,2) ~= size(testZ,2)
 end    
  
 %  判断k近邻是否可取 
-n= length(trainclassY);                                        %  测试样本点个数    
+n= length(trainclassY);                                                   %  测试样本点个数    
 if ( n < k)                                 
    error('You specified more neighbors than existed points.') 
 end                                                                       %  选择的近邻数不大于样本点数 
@@ -41,7 +41,7 @@ switch type                                                               %  对
      
 case '2norm'                                                              %  使用L2范数，欧氏距离 
     for i = 1:N 
-        dist            = sum((trainX - weight'*testZ(i,:)).^2,2);      %  dist 表示第i个测试点分别与n个训练样本点之间的欧式距离的平方 
+        dist            = sum((trainX - weight'*testZ(i,:)).^2,2);        %  dist 表示第i个测试点分别与n个训练样本点之间的欧式距离的平方 
         [m, indices]    = sort(dist);                                     %  按升序排列距离    
         histclass       = hist(trainclassY(indices(1:k)), class);         %  取前k个最短距离对应的点所属的类别，按照class进行直方图统计,histclass为class中各类出现的次数 
         [c, best]       = max(histclass);                                 %  c取所属类别出现最多的那个类别的次数，best标记出c在histclass中对应index，即为class中index 
@@ -50,7 +50,7 @@ case '2norm'                                                              %  使
      
 case '1norm'                                                              %  使用L1范数，即 Manhatan 距离 
     for i = 1:N 
-        dist            = sum(abs(trainX - weight'*testZ(i,:)),2);      %  dist 表示第i个测试点分别与n个训练样本点之间的L1距离 
+        dist            = sum(abs(trainX - weight'*testZ(i,:)),2);        %  dist 表示第i个测试点分别与n个训练样本点之间的L1距离 
         [m, indices]    = sort(dist);    
         histclass       = hist(trainclassY(indices(1:k)), class); 
         [c, best]       = max(histclass); 
