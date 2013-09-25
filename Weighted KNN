@@ -1,4 +1,4 @@
-function result = knn(trainX, trainclassY,testZ, k, weight,type) 
+function result = WeightedKNN(trainX, trainclassY,testZ, k, weight,type) 
  
 % Classify using the Nearest neighbor algorithm 
 % Inputs: 
@@ -140,4 +140,4 @@ case '1norm'                                                              %  使
      
 otherwise 
     error('Unknown measure function'); 
-end v
+end
