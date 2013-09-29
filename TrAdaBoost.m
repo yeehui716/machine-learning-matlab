@@ -33,7 +33,7 @@ resultLabels = ones(rowS+rowA+rowT,N)
 for i=1:N
     %p = weight./sum(weight)
     %resultLabels(:,i)= WeightedKNN(trainData,trainLabel,testData,5, weight);
-    resultLabels(:,i)= WeightedKNN(trainData,trainLabel,testData,10);
+    resultLabels(:,i)= WeightedKNN(trainData,trainLabel,testData,5);
     er = ErrorRate(LabelS,resultLabels(1:rowS,i),weight(1:rowS))  %原训练数据的分类错误率
     if(er>0.5)
         er = 0.5
@@ -43,21 +43,20 @@ for i=1:N
     end
     betaT(1,i)=er/(1-er)
     for j=1:rowS %更新原训练数据的权重
-        weight(j) = weight(j)*beta^abs(resultLabels(j,i)-LabelS(j))
+%         temp1 = resultLabels(j,i)-LabelS(j)
+%         temp2 = abs(resultLabels(j,i)-LabelS(j))
+%         temp3 = beta^abs(resultLabels(j,i)-LabelS(j))
+%         temp4 = beta^temp2
+        weight(j) = weight(j)* beta^abs(resultLabels(j,i)-LabelS(j))
     end
     for j=1:rowA %更新辅助训练数据的权重
         weight(rowS+j) = weight(rowS+j)*betaT(i)^(-abs(resultLabels(rowS+j,i))-LabelA(j))
     end
     
 end
-resultLabels(:,1)
-resultLabels(:,N)
-a = sum(resultLabels(:,1))
-a = sum(resultLabels(:,N))
-betaT(1,:)
 for i=1:rowT
-    temp1 = sum(resultLabels(rowS+rowA+i,ceil(N/2):N).*log(1./betaT(ceil(N/2:N))))
-    temp2 = 1/2*sum(log(1./(betaT(ceil(N/2):N))))
+    temp1 = sum(resultLabels(rowS+rowA+i,ceil(N/2):N).*log(1./betaT(1,ceil(N/2:N))))
+    temp2 = 1/2*sum(log(1./(betaT(1,ceil(N/2):N))))
     if(temp1>=temp2)
         H(i,1) = 1;
     else

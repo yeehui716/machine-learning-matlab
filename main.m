@@ -29,14 +29,43 @@ base_set_label=[base_set_Klungf_label;base_set_Klungz_label];
 
 TrainA = aux_train_set;
 LabelA = aux_train_set_label;
-TrainS = [Klungf(1:20,:);Klungz(1:20,:)];
-LabelS = [base_set_Klungf_label(1:20);base_set_Klungz_label(1:20)];
-Test = [Klungf(21:Klungf_m,:);Klungz(21:Klungz_m,:)];
-TestLabel = [base_set_Klungf_label(21:Klungf_m,:);base_set_Klungz_label(21:Klungz_m,:)]
+
+[TrainSPost,LabelSPost,TestPostData,TestPostLabel] = GetTrainTestData(Klungf,base_set_Klungf_label,0.07)
+[TrainSNegat,LabelSNegat,TestNegatData,TestNegatLabel] = GetTrainTestData(Klungz,base_set_Klungz_label,0.09)
+
+TrainS = [TrainSPost;TrainSNegat]
+LabelS = [LabelSPost;,LabelSNegat]
+Test = [TestPostData;TestNegatData]
+TestLabel = [TestPostLabel;TestNegatLabel]
 
 %«®“∆À„∑®
-ResultLabel = TrAdaBoost(TrainS,TrainA,LabelS,LabelA,Test,20);
+ResultLabel = TrAdaBoost(TrainS,TrainA,LabelS,LabelA,Test,10);
 erT = ErrorRate(ResultLabel,TestLabel)
+
+Post = sum(TestLabel);
+Negat = size(TestLabel,1) - Post;
+ResultPostT = 0;
+ResultNegatT = 0;
+for i=1:size(Test,1)
+    if(ResultLabel(i)==1 && ResultLabel(i) == TestLabel(i))
+        ResultPostT = ResultPostT +1;
+    end
+    if( ResultLabel(i)==0 && ResultLabel(i) == TestLabel(i) )
+        ResultNegatT = ResultNegatT + 1;
+    end
+end
 %∑««®“∆À„
-ResultLabel = WeightedKNN(TrainS,LabelS,Test,10);
+ResultLabel = WeightedKNN(TrainS,LabelS,Test,5);
 er = ErrorRate(ResultLabel,TestLabel)
+
+ResultPost = 0;
+ResultNegat = 0;
+for i=1:size(Test,1)
+    if(ResultLabel(i)==1 && ResultLabel(i) == TestLabel(i))
+        ResultPost = ResultPost +1;
+    end
+    if( ResultLabel(i)==0 && ResultLabel(i) == TestLabel(i) )
+        ResultNegat = ResultNegat + 1;
+    end
+end
+
