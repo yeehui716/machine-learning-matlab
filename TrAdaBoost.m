@@ -1,40 +1,40 @@
 function [H] = TrAdaBoost(TrainS,TrainA,LabelS,LabelA,Test,N)
 %
-% H ²âÊÔÑù±¾µÄ×îÖÕ·ÖÀà±êÇ©
-% TrainS Ô­ÑµÁ·Êý¾Ý
-% TrainA ¸¨ÖúÑµÁ·Êý¾Ý
-% LabelS Ô­ÑµÁ·Êý¾Ý±êÇ©(ÁÐÏòÁ¿)
-% LabelA ¸¨ÖúÑµÁ·Êý¾Ý±êÇ©(ÁÐÏòÁ¿)
-% Test  ²âÊÔÊý¾Ý
-% N µü´ú´ÎÊý
-%%%%%%%%%%%%%% Learner »ù±¾·ÖÀàÆ÷
+% H ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ·ï¿½ï¿½ï¿½ï¿½ï¿½Ç©
+% TrainS Ô­Ñµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+% TrainA ï¿½ï¿½ï¿½ï¿½Ñµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+% LabelS Ô­Ñµï¿½ï¿½ï¿½ï¿½ï¿½Ý±ï¿½Ç©(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
+% LabelA ï¿½ï¿½ï¿½ï¿½Ñµï¿½ï¿½ï¿½ï¿½ï¿½Ý±ï¿½Ç©(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
+% Test  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+% N ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+%%%%%%%%%%%%%% Learner ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 % Write by ChenBo 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 trainData  = [TrainS;TrainA]
 trainLabel = [LabelS;LabelA]
 
-% rowS Ô­ÑµÁ·Ñù±¾µÄ¸öÊý, columnS Ô­ÑµÁ·Ñù±¾µÄÎ¬Êý ;  rowA ¸¨ÖúÑµÁ·Ñù±¾µÄ¸öÊý, columnA ¸¨ÖúÑµÁ·Ñù±¾µÄÎ¬Êý
+% rowS Ô­Ñµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¸ï¿½ï¿½ï¿½, columnS Ô­Ñµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î¬ï¿½ï¿½ ;  rowA ï¿½ï¿½ï¿½ï¿½Ñµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¸ï¿½ï¿½ï¿½, columnA ï¿½ï¿½ï¿½ï¿½Ñµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î¬ï¿½ï¿½
 [rowS,columnS] = size(TrainS)
 [rowA,columnA] = size(TrainA)
-%rowT ²âÊÔÑù±¾µÄ¸öÊý , columnT²âÊÔÑù±¾µÄÎ¬Êý
+%rowT ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¸ï¿½ï¿½ï¿½ , columnTï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î¬ï¿½ï¿½
 [rowT,columnT] = size(Test)
 
-%Ëã·¨ÐèÒª¼ÆËãËùÓÐÑµÁ·¡¢²âÊÔÊý¾ÝµÄÔ¤²â½á¹û
+%ï¿½ã·¨ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ýµï¿½Ô¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 testData = [trainData;Test]
 
-%³õÊ¼»¯ÑµÁ·Ñù±¾È¨ÖØ¼°Beta
+%ï¿½ï¿½Ê¼ï¿½ï¿½Ñµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¨ï¿½Ø¼ï¿½Beta
 weight = ones(rowS+rowA,1)/(rowS+rowA)
-beta  = 1/(1+sqrt(2*log(rowS/N)))
+beta  = 1/(1+sqrt(2*log(rowA/N)))
 betaT = zeros(1,N)
 
-%¼ÇÂ¼N´Îµü´úÑµÁ·µÄ½á¹û£¨°üÀ¨ÑµÁ·Êý¾ÝÓë²âÊÔÊý¾Ý£©
+%ï¿½ï¿½Â¼Nï¿½Îµï¿½ï¿½ï¿½Ñµï¿½ï¿½ï¿½Ä½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½
 resultLabels = ones(rowS+rowA+rowT,N)
 
 for i=1:N
     %p = weight./sum(weight)
     %resultLabels(:,i)= WeightedKNN(trainData,trainLabel,testData,5, weight);
     resultLabels(:,i)= WeightedKNN(trainData,trainLabel,testData,5);
-    er = ErrorRate(LabelS,resultLabels(1:rowS,i),weight(1:rowS))  %Ô­ÑµÁ·Êý¾ÝµÄ·ÖÀà´íÎóÂÊ
+    er = ErrorRate(LabelS,resultLabels(1:rowS,i),weight(1:rowS))  %Ô­Ñµï¿½ï¿½ï¿½ï¿½ï¿½ÝµÄ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     if(er>0.5)
         er = 0.5
     end
@@ -42,15 +42,15 @@ for i=1:N
         er=0.001
     end
     betaT(1,i)=er/(1-er)
-    for j=1:rowS %¸üÐÂÔ­ÑµÁ·Êý¾ÝµÄÈ¨ÖØ
+    for j=1:rowS %ï¿½ï¿½ï¿½ï¿½Ô­Ñµï¿½ï¿½ï¿½ï¿½ï¿½Ýµï¿½È¨ï¿½ï¿½
 %         temp1 = resultLabels(j,i)-LabelS(j)
 %         temp2 = abs(resultLabels(j,i)-LabelS(j))
 %         temp3 = beta^abs(resultLabels(j,i)-LabelS(j))
 %         temp4 = beta^temp2
-        weight(j) = weight(j)* beta^abs(resultLabels(j,i)-LabelS(j))
+        weight(j) = weight(j)* betaT(i)^abs(resultLabels(j,i)-LabelS(j))
     end
-    for j=1:rowA %¸üÐÂ¸¨ÖúÑµÁ·Êý¾ÝµÄÈ¨ÖØ
-        weight(rowS+j) = weight(rowS+j)*betaT(i)^(-abs(resultLabels(rowS+j,i))-LabelA(j))
+    for j=1:rowA %ï¿½ï¿½ï¿½Â¸ï¿½ï¿½ï¿½Ñµï¿½ï¿½ï¿½ï¿½ï¿½Ýµï¿½È¨ï¿½ï¿½
+        weight(rowS+j) = weight(rowS+j)*beta^(-abs(resultLabels(rowS+j,i))-LabelA(j))
     end
     
 end
