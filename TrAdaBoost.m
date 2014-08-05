@@ -26,7 +26,7 @@ weight = ones(rowS+rowA,1)/(rowS+rowA)
 beta  = 1/(1+sqrt(2*log(rowA/N)))
 betaT = zeros(1,N)
 
-%由于迭代与最终计算需要使用所有样本标签
+% set the resultLabels has a size which is equivalent to the total number of labels (由于迭代与最终计算需要使用所有样本标签)
 resultLabels = ones(rowS+rowA+rowT,N)
 
 for i=1:N
@@ -41,14 +41,14 @@ for i=1:N
         er=0.001
     end
     betaT(1,i)=er/(1-er)
-    for j=1:rowS %调整源域训练样本权重
+    for j=1:rowS % Adjusting the weights of the domain source of the training samples (调整源域训练样本权重)
 %         temp1 = resultLabels(j,i)-LabelS(j)
 %         temp2 = abs(resultLabels(j,i)-LabelS(j))
 %         temp3 = beta^abs(resultLabels(j,i)-LabelS(j))
 %         temp4 = beta^temp2
         weight(j) = weight(j)* betaT(i)^abs(resultLabels(j,i)-LabelS(j))
     end
-    for j=1:rowA %调整辅助训练样本权重
+    for j=1:rowA % Adjusting the weights of the assisting training samples (调整辅助训练样本权重)
         weight(rowS+j) = weight(rowS+j)*beta^(-abs(resultLabels(rowS+j,i))-LabelA(j))
     end
     
