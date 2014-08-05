@@ -1,13 +1,13 @@
 function [H] = TrAdaBoost(TrainS,TrainA,LabelS,LabelA,Test,N)
 %
-% H 测试样本分类结果
-% TrainS 原训练样本
-% TrainA 辅助训练样本
-% LabelS 原训练样本标签
-% LabelA 辅助训练样本标签
-% Test  测试样本
-% N 迭代次数
-%%%%%%%%%%%%%% Learner 基本分类器
+% H - Classification of the tesing sample
+% TrainS - Original training samples
+% TrainA - Assisting training samples
+% LabelS - Original training labels
+% LabelA - Assisting training labels
+% Test  - Testing samples
+% N - Iteration
+%%%%%%%%%%%%%% Learner - Basic Classification Machine
 % Write by ChenBo 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 trainData  = [TrainS;TrainA]
@@ -21,7 +21,7 @@ trainLabel = [LabelS;LabelA]
 
 testData = [trainData;Test]
 
-%初始化weights 
+% Weights Initialization
 weight = ones(rowS+rowA,1)/(rowS+rowA)
 beta  = 1/(1+sqrt(2*log(rowA/N)))
 betaT = zeros(1,N)
